@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name         = "gemical"
   s.summary      = "Gemical command-line client."
   s.description  = "Manage your private Gems through the command line."
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
 
   s.authors      = ["Black Square Media Ltd"]
   s.email        = "info@blacksquaremedia.com"
@@ -17,4 +17,17 @@ Gem::Specification.new do |s|
   s.executables  = "gemical"
 
   s.files        = Dir['README.*', 'lib/**/*', 'bin/**/*']
+
+  s.add_dependency "commander"
+  s.add_dependency "rest-client"
+  s.add_dependency "multi_json"
+
+  case RUBY_PLATFORM
+  when "java"
+    s.add_dependency "jruby-openssl"
+  end
+
+  s.add_development_dependency "rake"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "webmock"
 end

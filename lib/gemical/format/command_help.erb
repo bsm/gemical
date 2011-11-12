@@ -1,0 +1,25 @@
+
+  Usage:
+    <%= @syntax || "gemical #{@name} [options]" %>
+<% if @description || @summary -%>
+
+  Summary:
+    <%= @description || @summary %>
+<% end -%>
+<% unless @options.empty? -%>
+
+  Options:
+<% for option in @options -%>
+    <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] %>
+<% end -%>
+<% end -%>
+<% unless @examples.empty? -%>
+
+  Examples:
+  <% for description, command in @examples -%>
+
+    # <%= description %>
+    <%= command %>
+  <% end -%>
+<% end -%>
+
