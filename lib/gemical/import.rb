@@ -39,6 +39,7 @@ command :"gems:add" do |c|
   c.option '--vault VAULT', 'Specify a vault'
   c.when_called Gemical::Commands::Gems, :create
 end
+alias_command :push, :'gems:add'
 
 command :"gems:remove" do |c|
   c.syntax = 'gemical gems:remove GEM VERSION [options]'

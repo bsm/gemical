@@ -15,13 +15,14 @@ class Gemical::Commands::Gems < Gemical::Commands::Base
   def create(args, options)
     terminate "Please provide a GEM file." unless args.first.is_a?(String)
 
-    file = current_path.join(args.first)
-    terminate "Hmm, no file in #{file}" unless file.file?
+    files = Pathname.glob(args).select(&:file?)
+    terminate "Hmm, no files found!" if files.empty?
 
     authenticate!
-    vault    = current_vault(options)
-    response = conn.post("/vaults/#{vault}/gems", :params => { "rubygem[file]" => file.open('rb') })
-    success "#{response['original_name']} was successfully added to vault '#{vault}'."
+    vault = current_vault(options)
+    files.each do |file|
+      upload(file, vault)
+    end
   rescue Gemical::Connection::HTTPNotFound
     terminate "Sorry, no such vault '#{vault}'."
   rescue Gemical::Connection::HTTPUnprocessable => e
@@ -42,5 +43,14 @@ class Gemical::Commands::Gems < Gemical::Commands::Base
   rescue Gemical::Connection::HTTPUnprocessable => e
     "Sorry, #{full_errors(e.response)}"
   end
+
+  private
+
+    def upload(file, vault)
+      res = conn.post("/vaults/#{vault}/gems", :params => { "rubygem[file]" => file.open('rb') })
+      say_ok "#{res['original_name']} was successfully added to vault '#{vault}'."
+    rescue Gemical::Connection::HTTPUnprocessable => e
+      say_error "Sorry, #{full_errors(e.response, 'name' => 'gem')} (#{file.basename})"
+    end
 
 end

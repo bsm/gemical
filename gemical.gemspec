@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+require File.expand_path('../lib/gemical/version', __FILE__)
 
 Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
@@ -8,7 +9,7 @@ Gem::Specification.new do |s|
   s.name         = "gemical"
   s.summary      = "Gemical command-line client."
   s.description  = "Manage your private Gems through the command line."
-  s.version      = "0.0.2"
+  s.version      = Gemical::VERSION::STRING
 
   s.authors      = ["Black Square Media Ltd"]
   s.email        = "info@blacksquaremedia.com"
