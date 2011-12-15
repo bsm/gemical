@@ -12,6 +12,12 @@ class Gemical::Commands::Bundle < Gemical::Commands::Base
       @sources << path
     end
 
+    def gem(*)
+    end
+
+    def group(*)
+    end
+
     def method_missing(sym, *a)
     end
   end
