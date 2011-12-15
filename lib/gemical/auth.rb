@@ -27,7 +27,7 @@ class Gemical::Auth
     verify_account!
 
     @verified_vault ||= if primary_vault
-      get_vault(primary_vault) || collect_vault("Ooops, you don't seem to have access to '#{primary_vault}' anymore.")
+      find_vault(primary_vault) || collect_vault("Ooops, you don't seem to have access to '#{primary_vault}' anymore.")
     else
       collect_vault("You haven't specified your primary vault yet.")
     end
@@ -62,6 +62,15 @@ class Gemical::Auth
     return nil unless configuration.primary_vault?
     value = configuration.primary_vault.read.split(/\s+/).first
     value if string_value?(value)
+  end
+
+  # @param [String] vault
+  #   The vault's name
+  # @return [Gemical::Vault]
+  #   A vault object for the given name
+  def find_vault(name)
+    ensure_vaults!
+    vaults.find {|v| v == name }
   end
 
   private
@@ -109,19 +118,13 @@ class Gemical::Auth
       end
     end
 
-    # Fetch vault
-    def get_vault(name)
-      ensure_vaults!
-      vaults.find {|v| v == name }
-    end
-
     # Collect user's preference about primary vault
     def collect_vault(message, save = true)
       ensure_vaults!
       say_warning "\n#{message}"
       name = ask "Which one should it be: ", vaults
       configuration.write! :primary_vault, name
-      get_vault(name)
+      find_vault(name)
     end
 
     # Ensure user has vaults, or exit

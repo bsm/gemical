@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gemical (0.0.3)
+    gemical (0.0.5)
       commander
       multi_json
       rest-client

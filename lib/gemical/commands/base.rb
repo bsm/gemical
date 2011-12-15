@@ -59,7 +59,7 @@ class Gemical::Commands::Base
     # @return [String]
     #   The current vault name
     def current_vault(options)
-      options.vault || primary_vault
+      Gemical.auth.find_vault(options.vault) || primary_vault
     end
 
     # @return [String]
